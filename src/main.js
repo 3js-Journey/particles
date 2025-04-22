@@ -20,15 +20,37 @@ const scene = new THREE.Scene();
  */
 const textureLoader = new THREE.TextureLoader();
 
+const particleTexture = textureLoader.load("/textures/particles/2.png");
+
 /*
  * Particles
  */
 
-const particlesGeometry = new THREE.SphereGeometry(1, 32, 32);
+const particlesGeometry = new THREE.BufferGeometry(1, 32, 32);
+const count = 5000;
+
+const positions = new Float32Array(count * 3);
+
+for (let i = 0; i < count * 3; i++) {
+  positions[i] = (Math.random() - 0.5) * 10;
+}
+
+particlesGeometry.setAttribute(
+  "position",
+  new THREE.BufferAttribute(positions, 3),
+);
 const particlesMaterial = new THREE.PointsMaterial({
-  size: 0.02,
+  size: 0.1,
   sizeAttenuation: true,
+  //map: particleTexture,
+  transparent: true,
+  alphaMap: particleTexture,
+  //alphaTest: 0.01, // discards pixels below value
+  // depthTest: false, // all particles are rendered regardless of their position on 3d
+  depthWrite: false,
+  // blending: THREE.AdditiveBlending, // may impact performance
 });
+particlesMaterial.color = new THREE.Color("#ff88cc");
 
 const particles = new THREE.Points(particlesGeometry, particlesMaterial);
 scene.add(particles);
