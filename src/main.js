@@ -111,10 +111,24 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
  * Animate
  */
 const clock = new THREE.Clock();
-
+//console.log(particles);
+console.log(particles.geometry);
+console.log(particlesGeometry);
 const tick = () => {
   const elapsedTime = clock.getElapsedTime();
 
+  // Update particles
+  // particles.rotation.y = elapsedTime * 0.3;
+
+  for (let i = 0; i < count; i++) {
+    const i3 = i * 3;
+    const x = particlesGeometry.attributes.position.array[i3 + 0];
+
+    particles.geometry.attributes.position.array[i3 + 1] = Math.sin(
+      elapsedTime + x,
+    );
+  }
+  particles.geometry.attributes.position.needsUpdate = true;
   // Update controls
   controls.update();
 
